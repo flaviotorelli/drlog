@@ -12,11 +12,38 @@ function drlog_init() {
 
   // debugging current user
   global $user;
-  $firephp->group('User: ' . $user->name);
+  $username = 'Anonymous';
+  if ($user->uid != 0) {
+    $username = $user->name;
+  }
+  $firephp->group('User: ' . $username);
   $firephp->log($user);
   $firephp->groupEnd();
+
+  // debugging meta tags (meta only)
+  $head = explode("\n", drupal_get_html_head());
+  $firephp->group('<meta>');
+  $firephp->log($head);
+  $firephp->groupEnd();
+
+  // Path and node info
+  $current_path = current_path();
+  $firephp->group('Node info');
+  $firephp->log(current_path(), 'Current path');
+  $firephp->log('', 'Path alias');
+  $firephp->groupEnd();
+
+
+  // css
+
+  // js
+
+
 }
 
+/*
+* Form alter
+*/
 function drlog_form_alter(&$form, &$form_state, $form_id){
   // debuggin the forms
   $firephp = FirePHP::getInstance(true);
@@ -24,3 +51,4 @@ function drlog_form_alter(&$form, &$form_state, $form_id){
   $firephp->log($form);
   $firephp->groupEnd(); 
 }
+
