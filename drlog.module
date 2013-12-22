@@ -8,7 +8,19 @@ function drlog_init() {
   require_once $path . 'FirePHP.class.php';
   require_once $path . 'fb.php';
 
-  // debugging
+  $firephp = FirePHP::getInstance(true);
+
+  // debugging current user
   global $user;
-  fb($user, '$user');
+  $firephp->group('User: ' . $user->name);
+  $firephp->log($user);
+  $firephp->groupEnd();
+}
+
+function drlog_form_alter(&$form, &$form_state, $form_id){
+  // debuggin the forms
+  $firephp = FirePHP::getInstance(true);
+  $firephp->group('Form found: ' . $form_id);
+  $firephp->log($form);
+  $firephp->groupEnd(); 
 }
