@@ -1,0 +1,5 @@
+name = FirePHP and Drupal
+description = FirePHP and Drupal integrated
+core = 7.x
+package = Development
+dependencies[] = libraries
