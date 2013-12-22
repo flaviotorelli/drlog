@@ -29,8 +29,17 @@ function drlog_init() {
   // Path and node info
   $current_path = current_path();
   $firephp->group('Node info');
-  $firephp->log(current_path(), 'Current path');
-  $firephp->log('', 'Path alias');
+  $firephp->log($current_path, 'Current path');
+  $firephp->log(request_path(), 'Request path');
+
+  $nid = explode('/', $current_path);
+  $node = node_load($nid[1]);
+  $firephp->log($node, 'Node load');
+  $firephp->groupEnd();
+
+  // Server
+  $firephp->group('Server');
+  $firephp->log($_SERVER);
   $firephp->groupEnd();
 
 
@@ -51,4 +60,3 @@ function drlog_form_alter(&$form, &$form_state, $form_id){
   $firephp->log($form);
   $firephp->groupEnd(); 
 }
-
