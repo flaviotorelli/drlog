@@ -2,11 +2,13 @@
 
 function drlog_init() {
 
-  // including the FirePHPCore librarie 
   $path = libraries_get_path('FirePHPCore') . '/lib/FirePHPCore/';
-
   require_once $path . 'FirePHP.class.php';
   require_once $path . 'fb.php';
+
+}
+
+function drlog_exit() {
 
   $firephp = FirePHP::getInstance(true);
 
@@ -26,27 +28,24 @@ function drlog_init() {
   $firephp->log($head);
   $firephp->groupEnd();
 
-  // Path and node info
-  $current_path = current_path();
-  $firephp->group('Node info');
-  $firephp->log($current_path, 'Current path');
-  $firephp->log(request_path(), 'Request path');
-
-  $nid = explode('/', $current_path);
-  $node = node_load($nid[1]);
-  $firephp->log($node, 'Node load');
-  $firephp->groupEnd();
-
   // Server
   $firephp->group('Server');
   $firephp->log($_SERVER);
   $firephp->groupEnd();
 
+  // Path and node info
+  $current_path = current_path();
 
-  // css
+  $firephp->group('Node info');
+  $firephp->log($current_path, 'current_path()');
+  $firephp->log(request_path(), 'request_path()');
 
-  // js
-
+  $nid = explode('/', $current_path);
+  if (is_numeric($nid[1])) {
+    $node = node_load($nid[1]);
+    $firephp->log($node, 'Node load');
+    $firephp->groupEnd();   
+  }
 
 }
 
@@ -54,7 +53,6 @@ function drlog_init() {
 * Form alter
 */
 function drlog_form_alter(&$form, &$form_state, $form_id){
-  // debuggin the forms
   $firephp = FirePHP::getInstance(true);
   $firephp->group('Form found: ' . $form_id);
   $firephp->log($form);
